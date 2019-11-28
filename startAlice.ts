@@ -1,5 +1,5 @@
 import { receiveMessageServer } from "./receiveMessageServer";
-import { ADD, BYE, RES, Message } from "./Message";
+import { ADD, BYE, RES } from "./Message";
 import { sendMessage } from "./sendMessage";
 import { roles, initialize } from "./globalObjects";
 import { messageDB } from "./messageDB";
@@ -11,10 +11,11 @@ async function executeProtocol(role:roles,port:number,host:string) {
    for(let i=0;i<5;i++) {
       const add = new ADD(value(),value());
       await sendMessage(roles.alice, roles.bob, add);
-      const msgPredicate: (message: Message) => boolean = m => (m.name === RES.name && m.from === roles.bob);
-      const msg = <RES> await messageDB.remove(msgPredicate);
+      const msg = <RES> await messageDB.remove(
+         m => (m.name === RES.name && m.from === roles.bob)
+      );
       if (msg)
-        console.log(`Send an ${add.name} to ${msg.from} with values ${add.value1} and ${add.value2}, received a ${msg.name} with ${msg.sum}`);
+        console.log(`Received a ${msg.name} with ${msg.sum}.`);
    }
    await sendMessage(roles.alice, roles.bob, new BYE() );
    receiveMessageServer.terminate();

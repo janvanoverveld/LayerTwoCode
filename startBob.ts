@@ -7,14 +7,17 @@ import { messageDB } from "./messageDB";
 async function executeProtocol( role:roles, port:number, host:string) {
    await initialize(role, port, host);
    while ( true ){
-      const msgPredicate: (message: Message) => boolean = m => (m.name === ADD.name && m.from === roles.alice) || (m.name === BYE.name && m.from === roles.alice);
-      const msg = await messageDB.remove(msgPredicate);
+      const msg = await messageDB.remove(
+         m => (m.name === ADD.name && m.from === roles.alice)
+           || (m.name === BYE.name && m.from === roles.alice)
+      );
       switch (msg.name) {
          case ADD.name: {
             const add = <ADD> msg;
+            console.log(`Received ${add.name} 
+                         with ${add.value1} and ${add.value2}.`);
             const res = new RES( add.value1 + add.value2 );
             await sendMessage(roles.bob, roles.alice, res);
-            console.log(`An ${add.name} received with ${add.value1} and ${add.value2}, send a RES with ${res.sum} back`);
             break;
          }
          case BYE.name:{
