@@ -15,7 +15,7 @@ function writeLogFile(fileName:string,data:string){
                                        console.log(`${err}`); }
                              else {
                                 console.log(`logfile ${logFileName}  for ${fileName} was created`);
-                                if (fileName!==mediatorFileName) process.stdout.write(data);  
+                                process.stdout.write(data);  
                              }
                            } );
 }

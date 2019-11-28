@@ -14,8 +14,7 @@ async function executeProtocol( role:roles, port:number, host:string) {
       switch (msg.name) {
          case ADD.name: {
             const add = <ADD> msg;
-            console.log(`Received ${add.name} 
-                         with ${add.value1} and ${add.value2}.`);
+            console.log(`ADD with ${add.value1} and ${add.value2}.`);
             const res = new RES( add.value1 + add.value2 );
             await sendMessage(roles.bob, roles.alice, res);
             break;
